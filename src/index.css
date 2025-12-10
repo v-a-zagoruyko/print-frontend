@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "tailwindcss";
+@import "animate.css";
+
+@theme {
+  --font-roboto: "Roboto Condensed", sans-serif;
+}
+
+:root {
+  font-family: "Roboto Condensed", sans-serif;
+  color: var(--color-neutral-700);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-white);
+}

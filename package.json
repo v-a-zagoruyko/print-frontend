@@ -1,0 +1,26 @@
+{
+  "name": "print-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@solidjs/router": "^0.15.4",
+    "@tailwindcss/vite": "^4.1.17",
+    "animate.css": "^4.1.1",
+    "bootstrap": "^5.3.8",
+    "solid-bootstrap": "^1.0.21",
+    "solid-js": "^1.9.10",
+    "tailwindcss": "^4.1.17"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.93.3",
+    "vite": "^7.2.4",
+    "vite-plugin-solid": "^2.11.10",
+    "vite-plugin-solid-svg": "^0.8.1"
+  }
+}
