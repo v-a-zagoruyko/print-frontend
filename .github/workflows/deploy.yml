@@ -23,7 +23,7 @@ jobs:
         run: |
           cat <<EOF > .env
           VITE_API_URL=${{ secrets.VITE_API_URL }}
-          VITE_API_URL=${{ secrets.VITE_LOGIN_URL }}
+          VITE_LOGIN_URL=${{ secrets.VITE_LOGIN_URL }}
           EOF
 
       - name: Build
