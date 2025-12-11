@@ -75,7 +75,9 @@ export function LabelList(props) {
     const printWindow = window.open("", "_blank");
 
     try {
-      const url = `/label/${encodeURIComponent(props.entity)}/${encodeURIComponent(id)}/`;
+      const url = `/label/${encodeURIComponent(
+        props.entity
+      )}/${encodeURIComponent(id)}/`;
       const data = await apiFetch(url);
 
       if (!data || !data.pdf) throw new Error("PDF не найден в ответе");
@@ -136,6 +138,7 @@ export function LabelList(props) {
 
           <div class="sticky-top bg-white py-2 mb-3 d-flex gap-2 overflow-auto">
             <Button
+              class="whitespace-nowrap"
               variant={
                 activeCategory() === null ? "primary" : "outline-primary"
               }
@@ -148,6 +151,7 @@ export function LabelList(props) {
             <For each={categories()}>
               {(category) => (
                 <Button
+                  class="whitespace-nowrap"
                   variant={
                     activeCategory() === category
                       ? "primary"
@@ -180,14 +184,16 @@ export function LabelList(props) {
                             {entity.street && (
                               <Card.Text>{entity.street || ""}</Card.Text>
                             )}
-                            <div class="mt-auto d-flex gap-2">
+                            <div class="mt-[18px] d-flex gap-2">
                               <Button
                                 variant="primary"
                                 size="sm"
                                 onClick={() => handlePrint(entity.id)}
                                 disabled={printing() === entity.id}
                               >
-                                {printing() === entity.id ? "Печать..." : "Печать"}
+                                {printing() === entity.id
+                                  ? "Печать..."
+                                  : "Печать"}
                               </Button>
                             </div>
                           </Card.Body>

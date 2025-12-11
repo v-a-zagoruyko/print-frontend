@@ -1,4 +1,4 @@
-import { Container, Navbar, Nav, Offcanvas } from "solid-bootstrap";
+import { Container, Navbar, Nav } from "solid-bootstrap";
 import { A } from "@solidjs/router";
 
 export function MainLayout(props) {
@@ -7,7 +7,9 @@ export function MainLayout(props) {
             <Navbar expand="lg" class="mb-4">
                 <Container>
                     <Navbar.Brand>
-                        ООО "Большие молодцы"
+                        <Nav.Link as={A} href="/">
+                            ООО "Большие молодцы"
+                        </Nav.Link>
                     </Navbar.Brand>
 
                     <Navbar.Toggle aria-controls="main-navbar-collapse" />
@@ -22,28 +24,6 @@ export function MainLayout(props) {
                             </Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
-
-                    <Navbar.Offcanvas
-                        id="main-navbar-offcanvas"
-                        aria-labelledby="main-navbar-label"
-                        placement="end"
-                    >
-                        <Offcanvas.Header closeButton>
-                            <Offcanvas.Title id="main-navbar-label">
-                                Меню
-                            </Offcanvas.Title>
-                        </Offcanvas.Header>
-                        <Offcanvas.Body>
-                            <Nav class="justify-content-end flex-grow-1 pe-3">
-                                <Nav.Link as={A} href="/print/products">
-                                    Этикетки товаров
-                                </Nav.Link>
-                                <Nav.Link as={A} href="/print/contractors">
-                                    Этикетки контрагентов
-                                </Nav.Link>
-                            </Nav>
-                        </Offcanvas.Body>
-                    </Navbar.Offcanvas>
                 </Container>
             </Navbar>
 
