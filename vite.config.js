@@ -6,6 +6,9 @@ import solidSvg from "vite-plugin-solid-svg";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
+  server: {
+    allowedHosts: ["front.local.molodcy",]
+  },
   plugins: [solid(), tailwindcss(), solidPlugin(), solidSvg()],
   resolve: {
     alias: {
@@ -13,6 +16,7 @@ export default defineConfig({
       pages: path.resolve(__dirname, "src/pages"),
       layouts: path.resolve(__dirname, "src/layouts"),
       components: path.resolve(__dirname, "src/components"),
+      utils: path.resolve(__dirname, "src/utils"),
       stores: path.resolve(__dirname, "src/stores"),
       assets: path.resolve(__dirname, "src/assets"),
       icons: path.resolve(__dirname, "src/icons"),

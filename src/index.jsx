@@ -4,6 +4,7 @@ import { Router, Route } from "@solidjs/router";
 import App from "./App.jsx";
 import { Main, LabelList } from "pages";
 import { MainLayout } from "layouts";
+import { ProtectedRoute } from "utils";
 
 render(
   () => (
@@ -11,25 +12,31 @@ render(
       <Route
         path="/"
         component={() => (
-          <MainLayout>
-            <Main />
-          </MainLayout>
+          <ProtectedRoute>
+            <MainLayout>
+              <Main />
+            </MainLayout>
+          </ProtectedRoute>
         )}
       />
       <Route
         path="/print/products"
         component={() => (
-          <MainLayout>
-            <LabelList entity="product" />
-          </MainLayout>
+          <ProtectedRoute>
+            <MainLayout>
+              <LabelList entity="product" />
+            </MainLayout>
+          </ProtectedRoute>
         )}
       />
       <Route
         path="/print/contractors"
         component={() => (
-          <MainLayout>
-            <LabelList entity="contractor" />
-          </MainLayout>
+          <ProtectedRoute>
+            <MainLayout>
+              <LabelList entity="contractor" />
+            </MainLayout>
+          </ProtectedRoute>
         )}
       />
     </Router>

@@ -1,5 +1,4 @@
 import { createSignal, createMemo, For, Show, createEffect } from "solid-js";
-import { A } from "@solidjs/router";
 import { apiFetch } from "api/fetch";
 import {
   Container,

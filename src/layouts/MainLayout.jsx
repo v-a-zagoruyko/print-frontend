@@ -1,14 +1,17 @@
 import { Container, Navbar, Nav } from "solid-bootstrap";
 import { A } from "@solidjs/router";
+import { useInfo } from "utils/InfoContext";
 
 export function MainLayout(props) {
+    const info = useInfo();
+
     return (
         <>
             <Navbar expand="lg" class="mb-4">
                 <Container>
                     <Navbar.Brand>
                         <Nav.Link as={A} href="/">
-                            ООО "Большие молодцы"
+                            {info.name}
                         </Nav.Link>
                     </Navbar.Brand>
 
