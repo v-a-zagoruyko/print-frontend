@@ -196,6 +196,7 @@ export function LabelList(props) {
                               </Button>
                             </div>
                           </Card.Body>
+                          <Card.Footer class="text-muted">{entity.template || ""}</Card.Footer>
                         </Card>
                       </Col>
                     )}
