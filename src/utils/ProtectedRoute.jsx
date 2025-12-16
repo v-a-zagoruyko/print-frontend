@@ -8,7 +8,7 @@ const LOGIN_URL = import.meta.env.VITE_LOGIN_URL;
 export function ProtectedRoute(props) {
     const [info] = createResource(async () => {
         try {
-            const data = await apiFetch("/info/");
+            const data = await apiFetch("/user/");
             return { success: true, data };
         } catch {
             return { success: false };

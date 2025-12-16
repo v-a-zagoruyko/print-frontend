@@ -188,6 +188,7 @@ export function LabelList(props) {
                                 variant="primary"
                                 size="sm"
                                 onClick={() => handlePrint(entity.id)}
+                                onAuxClick={() => handlePrint(entity.id)}
                                 disabled={printing() === entity.id}
                               >
                                 {printing() === entity.id
@@ -196,7 +197,7 @@ export function LabelList(props) {
                               </Button>
                             </div>
                           </Card.Body>
-                          <Card.Footer class="text-muted">{entity.template || ""}</Card.Footer>
+                          {entity.template && <Card.Footer class="text-muted">{entity.template || ""}</Card.Footer>}
                         </Card>
                       </Col>
                     )}
