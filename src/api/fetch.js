@@ -1,3 +1,5 @@
+import { camelizeKeys } from "humps";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 function getCookie(name) {
@@ -24,5 +26,6 @@ export async function apiFetch(path, options = {}) {
   if (!res.ok) {
     throw new Error(`API error: ${res.status}`);
   }
-  return res.json();
+  const data = await res.json();
+  return camelizeKeys(data);
 }

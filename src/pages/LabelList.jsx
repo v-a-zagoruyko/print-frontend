@@ -183,7 +183,7 @@ export function LabelList(props) {
                             {entity.street && (
                               <Card.Text>{entity.street || ""}</Card.Text>
                             )}
-                            <div class="mt-[18px] d-flex gap-2">
+                            <div class="mt-[18px] d-flex flex-wrap gap-2">
                               <Button
                                 variant="primary"
                                 size="sm"
@@ -195,11 +195,11 @@ export function LabelList(props) {
                                   ? "Печать..."
                                   : "Печать"}
                               </Button>
-                              {entity.edit_url && (
+                              {entity.editUrl && (
                                 <Button
                                   as="a"
                                   target="_blank"
-                                  href={entity.edit_url}
+                                  href={entity.editUrl}
                                   variant="outline-secondary"
                                   size="sm"
                                 >

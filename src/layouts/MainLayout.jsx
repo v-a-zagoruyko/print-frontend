@@ -13,7 +13,7 @@ export function MainLayout(props) {
                 <Container>
                     <Navbar.Brand>
                         <Nav.Link as={A} href="/">
-                            {info.company_name} {info.is_superuser}
+                            {info.companyName} {info.isSuperuser}
                         </Nav.Link>
                     </Navbar.Brand>
 

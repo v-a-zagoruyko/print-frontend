@@ -38,8 +38,8 @@ export function ProtectedRoute(props) {
   };
 
   const checkPermissions = (user, requiredGroups) => {
-    if (!user || !user.is_staff) return false;
-    if (user.is_superuser) return true;
+    if (!user || !user.isStaff) return false;
+    if (user.isSuperuser) return true;
     return hasRequiredGroups(user.groups, requiredGroups);
   };
 
