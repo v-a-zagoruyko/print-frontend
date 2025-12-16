@@ -2,7 +2,7 @@
 import { render } from "solid-js/web";
 import { Router, Route } from "@solidjs/router";
 import App from "./App.jsx";
-import { Main, LabelList } from "pages";
+import { Main, LabelList, Default } from "pages";
 import { MainLayout } from "layouts";
 import { ProtectedRoute } from "utils";
 
@@ -35,6 +35,16 @@ render(
           <ProtectedRoute>
             <MainLayout>
               <LabelList entity="contractor" />
+            </MainLayout>
+          </ProtectedRoute>
+        )}
+      />
+      <Route
+        path="*"
+        component={() => (
+          <ProtectedRoute>
+            <MainLayout>
+              <Default />
             </MainLayout>
           </ProtectedRoute>
         )}
