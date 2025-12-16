@@ -174,16 +174,20 @@ export function LabelList(props) {
                   <For each={items}>
                     {(entity) => (
                       <Col xs="12" sm="6" md="6" lg="3">
-                        <Card class="h-100 d-flex flex-column">
-                          <Card.Body class="d-flex flex-column">
-                            <Card.Subtitle class="mb-2 text-muted">
-                              {entity.category || ""}
-                            </Card.Subtitle>
-                            <Card.Title>{entity.name || ""}</Card.Title>
-                            {entity.street && (
-                              <Card.Text>{entity.street || ""}</Card.Text>
-                            )}
-                            <div class="mt-[18px] d-flex flex-wrap gap-2">
+                        <Card class="h-100 d-flex flex-column" bg="light">
+                          <Card.Header class="mb-2 text-muted font-semibold">
+                            {entity.category || ""}
+                          </Card.Header>
+                          <Card.Body class="min-h-[140px] d-flex flex-column">
+                            <div class="mb-auto">
+                              {entity.name && (
+                                <Card.Title>{entity.name}</Card.Title>
+                              )}
+                              {entity.street && (
+                                <Card.Text>{entity.street}</Card.Text>
+                              )}
+                            </div>
+                            <div class="mt-[22px] d-flex flex-wrap gap-2">
                               <Button
                                 variant="primary"
                                 size="sm"
@@ -192,7 +196,7 @@ export function LabelList(props) {
                                 disabled={printing() === entity.id}
                               >
                                 {printing() === entity.id
-                                  ? "Печать..."
+                                  ? "Загрузка..."
                                   : "Печать"}
                               </Button>
                               {entity.editUrl && (
@@ -209,8 +213,8 @@ export function LabelList(props) {
                             </div>
                           </Card.Body>
                           {entity.template && (
-                            <Card.Footer class="text-muted">
-                              {entity.template || ""}
+                            <Card.Footer class="text-muted font-semibold">
+                              {entity.template}
                             </Card.Footer>
                           )}
                         </Card>
