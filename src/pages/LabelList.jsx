@@ -195,9 +195,24 @@ export function LabelList(props) {
                                   ? "Печать..."
                                   : "Печать"}
                               </Button>
+                              {entity.edit_url && (
+                                <Button
+                                  as="a"
+                                  target="_blank"
+                                  href={entity.edit_url}
+                                  variant="outline-secondary"
+                                  size="sm"
+                                >
+                                  Редактировать
+                                </Button>
+                              )}
                             </div>
                           </Card.Body>
-                          {entity.template && <Card.Footer class="text-muted">{entity.template || ""}</Card.Footer>}
+                          {entity.template && (
+                            <Card.Footer class="text-muted">
+                              {entity.template || ""}
+                            </Card.Footer>
+                          )}
                         </Card>
                       </Col>
                     )}
