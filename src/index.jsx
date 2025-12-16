@@ -2,9 +2,13 @@
 import { render } from "solid-js/web";
 import { Router, Route } from "@solidjs/router";
 import App from "./App.jsx";
-import { Main, LabelList, Default } from "pages";
+import { Main, LabelList, Protected, Default } from "pages";
 import { MainLayout } from "layouts";
 import { ProtectedRoute } from "utils";
+
+const accessGroups = {
+  "print": ['Печатник'],
+}
 
 render(
   () => (
@@ -12,7 +16,7 @@ render(
       <Route
         path="/"
         component={() => (
-          <ProtectedRoute>
+          <ProtectedRoute accessGroups={accessGroups.print}>
             <MainLayout>
               <Main />
             </MainLayout>
@@ -22,7 +26,7 @@ render(
       <Route
         path="/print/products"
         component={() => (
-          <ProtectedRoute>
+          <ProtectedRoute accessGroups={accessGroups.print}>
             <MainLayout>
               <LabelList entity="product" />
             </MainLayout>
@@ -32,9 +36,19 @@ render(
       <Route
         path="/print/contractors"
         component={() => (
-          <ProtectedRoute>
+          <ProtectedRoute accessGroups={accessGroups.print}>
             <MainLayout>
               <LabelList entity="contractor" />
+            </MainLayout>
+          </ProtectedRoute>
+        )}
+      />
+      <Route
+        path="/error"
+        component={() => (
+          <ProtectedRoute>
+            <MainLayout>
+              <Protected />
             </MainLayout>
           </ProtectedRoute>
         )}

@@ -1,17 +1,17 @@
 import { A } from "@solidjs/router";
 import { Container, Card, Button } from "solid-bootstrap";
 
-export function Default() {
+export function Protected() {
   return (
     <Container
       as="main"
       class="mt-3 mb-5 d-flex justify-content-center align-items-center min-h-[80vh]"
     >
-      <Card class="p-3 w-full sm:w-[420px]" bg="warning" text="dark">
+      <Card class="p-3 w-full sm:w-[420px]" bg="danger" text="light">
         <Card.Body class="d-flex flex-column">
-          <Card.Title>Страница не найдена</Card.Title>
+          <Card.Title>Ошибка</Card.Title>
           <div class="mt-3">
-            <p>Запрошенная страница не существует или была перемещена.</p>
+            <p>Недостаточно прав для просмотра страницы.</p>
           </div>
           <div class="mt-3">
             <A href="/" class="text-decoration-none">
