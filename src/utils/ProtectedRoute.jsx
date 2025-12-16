@@ -5,6 +5,17 @@ import { InfoContext } from "./InfoContext";
 
 const LOGIN_URL = import.meta.env.VITE_LOGIN_URL;
 
+function buildLoginRedirect() {
+    const current = window.location.href;
+    try {
+        const login = new URL(LOGIN_URL);
+        login.searchParams.set("next", `/post_login_redirect/?url=${current}`);
+        return login.toString();
+    } catch {
+        return `${LOGIN_URL}?next=/post_login_redirect/?url=${encodeURIComponent(current)}`;
+    }
+}
+
 export function ProtectedRoute(props) {
     const [info] = createResource(async () => {
         try {
@@ -20,7 +31,7 @@ export function ProtectedRoute(props) {
             when={info() && info().success}
             fallback={
                 info() && !info().success
-                    ? (() => { window.location.href = LOGIN_URL; return null })()
+                    ? (() => { window.location.href = buildLoginRedirect(); return null })()
                     : (
                         <Container
                             class="d-flex justify-content-center align-items-center"
