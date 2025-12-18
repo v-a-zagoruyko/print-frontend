@@ -1,4 +1,3 @@
-import { Show } from "solid-js";
 import { Container, Navbar, Nav } from "solid-bootstrap";
 import { A } from "@solidjs/router";
 import { useInfo } from "utils/InfoContext";
