@@ -10,6 +10,10 @@ import {
   Button,
 } from "solid-bootstrap";
 
+const templatesMap = {
+  "Самокат": "!bg-red-300 !border-red-300 !text-white",
+};
+
 export function LabelList(props) {
   const [data, setData] = createSignal(null);
   const [error, setError] = createSignal(null);
@@ -213,7 +217,7 @@ export function LabelList(props) {
                             </div>
                           </Card.Body>
                           {entity.template && (
-                            <Card.Footer class="text-muted font-semibold">
+                            <Card.Footer class={`text-muted font-semibold ${templatesMap[entity.template] ?? ""}`}>
                               {entity.template}
                             </Card.Footer>
                           )}
