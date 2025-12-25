@@ -7,6 +7,9 @@ import {
   Spinner,
   Alert,
   Card,
+  Navbar,
+  Nav,
+  Form,
   Button,
   Toast,
   ToastContainer,
@@ -23,6 +26,7 @@ export function LabelList(props) {
   const [error, setError] = createSignal(null);
   const [loading, setLoading] = createSignal(true);
   const [activeCategory, setActiveCategory] = createSignal(null);
+  const [selectedDate, setSelectedDate] = createSignal(tomorrowDate());
 
   const [printing, setPrinting] = createSignal(null);
   const [printError, setPrintError] = createSignal(null);
@@ -42,6 +46,27 @@ export function LabelList(props) {
   function showError(message) {
     setPrintError(message);
     pushToast("Ошибка", message);
+  }
+
+  function onSelectDate(e) {
+    setSelectedDate(e.target.value);
+  }
+
+  function todayDate() {
+    const t = new Date();
+    const month = String(t.getMonth() + 1).padStart(2, "0");
+    const day = String(t.getDate()).padStart(2, "0");
+    return `${t.getFullYear()}-${month}-${day}`;
+  }
+
+  function tomorrowDate() {
+    const t = new Date();
+    t.setDate(t.getDate() + 1);
+
+    const month = String(t.getMonth() + 1).padStart(2, "0");
+    const day = String(t.getDate()).padStart(2, "0");
+
+    return `${t.getFullYear()}-${month}-${day}`;
   }
 
   createEffect(() => {
@@ -98,10 +123,15 @@ export function LabelList(props) {
 
     const printWindow = window.open("", "_blank");
 
+    const params = new URLSearchParams();
+    if (selectedDate()) {
+      params.set("date", selectedDate());
+    }
+
     try {
       const url = `/label/${encodeURIComponent(
         props.entity
-      )}/${encodeURIComponent(id)}/`;
+      )}/${encodeURIComponent(id)}/?${params.toString()}`;
       const data = await apiFetch(url);
 
       if (!data || !data.pdf) throw new Error("PDF не найден в ответе");
@@ -140,10 +170,15 @@ export function LabelList(props) {
     setPrinting(id);
     setPrintError(null);
 
+    const params = new URLSearchParams();
+    if (selectedDate()) {
+      params.set("date", selectedDate());
+    }
+
     try {
       const url = `/label/${encodeURIComponent(
         props.entity
-      )}/${encodeURIComponent(id)}/`;
+      )}/${encodeURIComponent(id)}/?${params.toString()}`;
       const data = await apiFetch(url);
 
       if (!data || !data.pdf) throw new Error("PDF не найден в ответе");
@@ -191,6 +226,23 @@ export function LabelList(props) {
         }
       >
         <PrinterNavbar />
+        <Show when={props.entity === "product"}>
+          <Navbar expand="lg">
+            <Container>
+              <Nav class="me-auto w-full d-flex align-items-center gap-2 min-h-[58px]">
+                <Form.Control
+                  type="date"
+                  value={selectedDate()}
+                  onInput={onSelectDate}
+                  min={todayDate()}
+                  aria-label="Выбор даты"
+                  class="!w-full sm:!w-[350px]"
+                  size="sm"
+                />
+              </Nav>
+            </Container>
+          </Navbar>
+        </Show>
         <Container as="article" class="mt-3 mb-5">
           <div class="sticky-top bg-white py-2 mb-3 d-flex gap-2 overflow-auto">
             <Button
@@ -250,7 +302,9 @@ export function LabelList(props) {
                                 size="sm"
                                 onClick={() => handlePrint(entity.id)}
                                 disabled={
-                                  !qzLoaded() || !selectedPrinter() || printing() === entity.id
+                                  !qzLoaded() ||
+                                  !selectedPrinter() ||
+                                  printing() === entity.id
                                 }
                               >
                                 {printing() === entity.id
