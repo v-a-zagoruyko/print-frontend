@@ -8,10 +8,14 @@ import {
   Alert,
   Card,
   Button,
+  Toast,
+  ToastContainer,
 } from "solid-bootstrap";
+import { PrinterNavbar } from "components";
+import { usePrinter } from "utils/PrinterContext";
 
 const templatesMap = {
-  "Самокат": "!bg-red-300 !border-red-300 !text-white",
+  Самокат: "!bg-red-300 !border-red-300 !text-white",
 };
 
 export function LabelList(props) {
@@ -22,6 +26,23 @@ export function LabelList(props) {
 
   const [printing, setPrinting] = createSignal(null);
   const [printError, setPrintError] = createSignal(null);
+
+  const [toasts, setToasts] = createSignal([]);
+
+  const { selectedPrinter, printBase64, qzLoaded } = usePrinter();
+
+  function pushToast(title, message) {
+    setToasts((prev) => [...prev, { id: Date.now(), title, message }]);
+  }
+
+  function removeToast(id) {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }
+
+  function showError(message) {
+    setPrintError(message);
+    pushToast("Ошибка", message);
+  }
 
   createEffect(() => {
     setLoading(true);
@@ -66,9 +87,9 @@ export function LabelList(props) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handlePrint = async (id) => {
+  const handlePreview = async (id) => {
     if (!id) {
-      setPrintError("Не указан id");
+      showError("Не указан id");
       return;
     }
 
@@ -103,8 +124,45 @@ export function LabelList(props) {
         window.open(blobUrl, "_blank");
       }
     } catch (err) {
-      setPrintError(err?.message || String(err));
+      showError(err?.message || String(err));
       if (printWindow) printWindow.close();
+    } finally {
+      setPrinting(null);
+    }
+  };
+
+  const handlePrint = async (id) => {
+    if (!id) {
+      showError("Не указан id");
+      return;
+    }
+
+    setPrinting(id);
+    setPrintError(null);
+
+    try {
+      const url = `/label/${encodeURIComponent(
+        props.entity
+      )}/${encodeURIComponent(id)}/`;
+      const data = await apiFetch(url);
+
+      if (!data || !data.pdf) throw new Error("PDF не найден в ответе");
+
+      const input = window.prompt("Количество копий", "1");
+      if (input === null) {
+        setPrinting(null);
+        return;
+      }
+      const copies = parseInt(input, 10);
+      if (!copies || copies < 1) throw new Error("Неверное количество копий");
+
+      try {
+        await printBase64(data.pdf, copies);
+      } catch (e) {
+        throw e;
+      }
+    } catch (err) {
+      showError(err?.message || String(err));
     } finally {
       setPrinting(null);
     }
@@ -132,13 +190,8 @@ export function LabelList(props) {
           </Container>
         }
       >
+        <PrinterNavbar />
         <Container as="article" class="mt-3 mb-5">
-          <Show when={printError()}>
-            <Alert variant="danger" class="mb-3">
-              {printError()}
-            </Alert>
-          </Show>
-
           <div class="sticky-top bg-white py-2 mb-3 d-flex gap-2 overflow-auto">
             <Button
               class="whitespace-nowrap"
@@ -196,17 +249,30 @@ export function LabelList(props) {
                                 variant="primary"
                                 size="sm"
                                 onClick={() => handlePrint(entity.id)}
-                                onAuxClick={() => handlePrint(entity.id)}
+                                disabled={
+                                  !qzLoaded || !selectedPrinter() || printing() === entity.id
+                                }
+                              >
+                                {printing() === entity.id
+                                  ? "Печать..."
+                                  : "Печать"}
+                              </Button>
+                              <Button
+                                variant="outline-primary"
+                                size="sm"
+                                onClick={() => handlePreview(entity.id)}
+                                onAuxClick={() => handlePreview(entity.id)}
                                 disabled={printing() === entity.id}
                               >
                                 {printing() === entity.id
                                   ? "Загрузка..."
-                                  : "Печать"}
+                                  : "Просмотр"}
                               </Button>
                               {entity.editUrl && (
                                 <Button
                                   as="a"
                                   target="_blank"
+                                  class="w-full"
                                   href={entity.editUrl}
                                   variant="outline-secondary"
                                   size="sm"
@@ -217,7 +283,11 @@ export function LabelList(props) {
                             </div>
                           </Card.Body>
                           {entity.template && (
-                            <Card.Footer class={`text-muted font-semibold ${templatesMap[entity.template] ?? ""}`}>
+                            <Card.Footer
+                              class={`text-muted font-semibold ${
+                                templatesMap[entity.template] ?? ""
+                              }`}
+                            >
                               {entity.template}
                             </Card.Footer>
                           )}
@@ -229,6 +299,23 @@ export function LabelList(props) {
               </>
             )}
           </For>
+
+          <ToastContainer position="top-end" class="p-3">
+            {toasts().map((t) => (
+              <Toast
+                show={true}
+                onClose={() => removeToast(t.id)}
+                autohide={true}
+                delay={3000}
+                key={t.id}
+              >
+                <Toast.Header>
+                  <strong class="me-auto">{t.title}</strong>
+                </Toast.Header>
+                <Toast.Body>{t.message}</Toast.Body>
+              </Toast>
+            ))}
+          </ToastContainer>
         </Container>
       </Show>
     </Show>

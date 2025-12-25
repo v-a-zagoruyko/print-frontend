@@ -14,6 +14,7 @@
     "animate.css": "^4.1.1",
     "bootstrap": "^5.3.8",
     "humps": "^2.0.1",
+    "qz-tray": "^2.2.5",
     "solid-bootstrap": "^1.0.21",
     "solid-js": "^1.9.10",
     "tailwindcss": "^4.1.17"

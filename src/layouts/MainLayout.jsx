@@ -9,7 +9,7 @@ export function MainLayout(props) {
 
   return (
     <>
-      <Navbar expand="lg" class="mb-4">
+      <Navbar expand="lg">
         <Container>
           <Navbar.Brand>
             <Nav.Link as={A} href="/">

@@ -2,6 +2,7 @@ import { createResource, Show } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import { Container, Spinner } from "solid-bootstrap";
 import { apiFetch } from "api/fetch";
+import { PrinterProvider } from "./PrinterContext";
 import { InfoContext } from "./InfoContext";
 
 const LOGIN_URL = import.meta.env.VITE_LOGIN_URL;
@@ -71,9 +72,11 @@ export function ProtectedRoute(props) {
           return null;
         }
         return (
-          <InfoContext.Provider value={info().data}>
-            {props.children}
-          </InfoContext.Provider>
+          <PrinterProvider>
+            <InfoContext.Provider value={info().data}>
+              {props.children}
+            </InfoContext.Provider>
+          </PrinterProvider>
         );
       })()}
     </Show>
