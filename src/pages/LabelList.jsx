@@ -29,7 +29,7 @@ export function LabelList(props) {
 
   const [toasts, setToasts] = createSignal([]);
 
-  const { selectedPrinter, printBase64, qzLoaded } = usePrinter();
+  const { selectedPrinter, printBase64, printPngBase64, qzLoaded } = usePrinter();
 
   function pushToast(title, message) {
     setToasts((prev) => [...prev, { id: Date.now(), title, message }]);
@@ -168,6 +168,44 @@ export function LabelList(props) {
     }
   };
 
+  const handlePrintPng = async (id) => {
+    if (!id) {
+      showError("Не указан id");
+      return;
+    }
+
+    setPrinting(id);
+    setPrintError(null);
+
+    try {
+      const url = `/label/${encodeURIComponent(
+        props.entity
+      )}/${encodeURIComponent(id)}/`;
+      const data = await apiFetch(url);
+      console.log(data)
+
+      if (!data || !data.pngV2) throw new Error("PDF не найден в ответе");
+
+      const input = window.prompt("Количество копий", "1");
+      if (input === null) {
+        setPrinting(null);
+        return;
+      }
+      const copies = parseInt(input, 10);
+      if (!copies || copies < 1) throw new Error("Неверное количество копий");
+
+      try {
+        await printPngBase64(data.pngV2, copies);
+      } catch (e) {
+        throw e;
+      }
+    } catch (err) {
+      showError(err?.message || String(err));
+    } finally {
+      setPrinting(null);
+    }
+  };
+
   return (
     <Show
       when={!loading()}
@@ -256,6 +294,18 @@ export function LabelList(props) {
                                 {printing() === entity.id
                                   ? "Печать..."
                                   : "Печать"}
+                              </Button>
+                              <Button
+                                variant="primary"
+                                size="sm"
+                                onClick={() => handlePrintPng(entity.id)}
+                                disabled={
+                                  !qzLoaded() || !selectedPrinter() || printing() === entity.id
+                                }
+                              >
+                                {printing() === entity.id
+                                  ? "Печать..."
+                                  : "Печать (тест)"}
                               </Button>
                               <Button
                                 variant="outline-primary"

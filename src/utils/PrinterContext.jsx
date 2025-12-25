@@ -57,6 +57,12 @@ export function PrinterProvider(props) {
     await qzService.printPdfBase64(pdfBase64, copies, printer);
   }
 
+  async function printPngBase64(pdfBase64, copies = 1) {
+    const printer = selectedPrinter();
+    if (!printer) throw new Error("Принтер не выбран");
+    await qzService.printPngBase64(pdfBase64, copies, printer);
+  }
+
   onMount(() => {
     (async () => {
       try {
@@ -73,6 +79,7 @@ export function PrinterProvider(props) {
     choosePrinter,
     refreshPrinters,
     printBase64,
+    printPngBase64,
     qzLoaded,
     qzError,
     initQzConnection,
