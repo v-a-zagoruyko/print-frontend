@@ -250,7 +250,7 @@ export function LabelList(props) {
                                 size="sm"
                                 onClick={() => handlePrint(entity.id)}
                                 disabled={
-                                  !qzLoaded || !selectedPrinter() || printing() === entity.id
+                                  !qzLoaded() || !selectedPrinter() || printing() === entity.id
                                 }
                               >
                                 {printing() === entity.id
