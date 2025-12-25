@@ -8,6 +8,8 @@ export async function initQz() {
   initializing = (async () => {
     const mod = await import("qz-tray");
     qz = mod.default || mod;
+    // qz.security.setCertificatePromise(() => Promise.resolve(""));
+    // qz.security.setSignaturePromise(() => Promise.resolve("dummy"));
     try {
       if (!qz.websocket.isActive()) await qz.websocket.connect();
     } catch (e) {
@@ -35,8 +37,9 @@ export async function printPdfBase64(base64Pdf, copies = 1, printerName = "") {
   await initQz();
   if (!printerName) throw new Error("Printer not specified");
   const config = qz.configs.create(printerName, {
-    colorType: 'grayscale',
-    interpolation: "nearest-neighbor"
+    colorType: "grayscale",
+    interpolation: "nearest-neighbor",
+    density: "203",
   });
   const data = [
     {
@@ -44,7 +47,6 @@ export async function printPdfBase64(base64Pdf, copies = 1, printerName = "") {
       format: "pdf",
       flavor: "base64",
       data: base64Pdf,
-      density: "203"
     },
   ];
   for (let i = 0; i < copies; i++) {
