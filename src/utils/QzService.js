@@ -51,7 +51,7 @@ export async function printPdfBase64(base64Pdf, copies = 1, printerName = "") {
       format: "pdf",
       flavor: "base64",
       data: base64Pdf,
-      options: { ignoreTransparency: true, altFontRendering: true }
+      options: { ignoreTransparency: true }
     },
   ];
   await qz.print(config, data);
