@@ -37,9 +37,11 @@ export async function printPdfBase64(base64Pdf, copies = 1, printerName = "") {
   await initQz();
   if (!printerName) throw new Error("Printer not specified");
   const config = qz.configs.create(printerName, {
+    size: {width: 58, height: 60}, units: 'mm',
     colorType: "grayscale",
     interpolation: "nearest-neighbor",
     density: "203",
+    copies
   });
   const data = [
     {
@@ -49,7 +51,7 @@ export async function printPdfBase64(base64Pdf, copies = 1, printerName = "") {
       data: base64Pdf,
     },
   ];
-  for (let i = 0; i < copies; i++) {
-    await qz.print(config, data);
-  }
+  await qz.print(config, data);
+  // for (let i = 0; i < copies; i++) {
+  // }
 }
