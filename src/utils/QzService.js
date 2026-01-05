@@ -1,6 +1,8 @@
 let qz;
 let initializing = null;
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export async function initQz() {
   if (qz && qz.websocket && qz.websocket.isActive && qz.websocket.isActive())
     return qz;
@@ -8,8 +10,41 @@ export async function initQz() {
   initializing = (async () => {
     const mod = await import("qz-tray");
     qz = mod.default || mod;
-    // qz.security.setCertificatePromise(() => Promise.resolve(""));
-    // qz.security.setSignaturePromise(() => Promise.resolve("dummy"));
+
+    qz.security.setCertificatePromise(function (resolve, reject) {
+      fetch(`${API_URL}/qz/cert/`, {
+        cache: "no-store",
+        headers: { "Content-Type": "text/plain" },
+      })
+        .then(function (resp) {
+          resp.ok ? resp.text().then(resolve) : reject(resp.statusText);
+        })
+        .catch(reject);
+    });
+
+    qz.security.setSignatureAlgorithm("SHA512");
+
+    qz.security.setSignaturePromise(function (toSign) {
+      return function (resolve, reject) {
+        fetch(`${API_URL}/qz/sign/`, {
+          method: "POST",
+          cache: "no-store",
+          credentials: "include",
+          headers: { "Content-Type": "text/plain" },
+          body: toSign,
+        })
+          .then((resp) => {
+            if (!resp.ok)
+              return resp.text().then((t) => {
+                throw new Error("Bad response: " + t);
+              });
+            return resp.text();
+          })
+          .then(resolve)
+          .catch(reject);
+      };
+    });
+
     try {
       if (!qz.websocket.isActive()) await qz.websocket.connect();
     } catch (e) {
@@ -37,13 +72,14 @@ export async function printPdfBase64(base64Pdf, copies = 1, printerName = "") {
   await initQz();
   if (!printerName) throw new Error("Printer not specified");
   const config = qz.configs.create(printerName, {
-    size: {width: 58, height: 60}, units: 'mm',
+    size: { width: 58, height: 60 },
+    units: "mm",
     rasterize: false,
     colorType: "grayscale",
     interpolation: "nearest-neighbor",
     density: "203",
     scaleContent: false,
-    copies
+    copies,
   });
   const data = [
     {
@@ -51,7 +87,7 @@ export async function printPdfBase64(base64Pdf, copies = 1, printerName = "") {
       format: "pdf",
       flavor: "base64",
       data: base64Pdf,
-      options: { ignoreTransparency: true }
+      options: { ignoreTransparency: true },
     },
   ];
   await qz.print(config, data);
