@@ -1,9 +1,10 @@
-import { createSignal, createEffect, onMount } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import {
   Navbar,
   Nav,
   Container,
   Form,
+  Placeholder,
   Alert,
   Toast,
   ToastContainer,
@@ -48,34 +49,38 @@ export function PrinterNavbar() {
     }
   }
 
-  onMount(() => {
-    (async () => {
-      try {
-        await refreshPrinters();
-      } catch (e) {}
-    })();
-  });
-
   return (
     <>
       <Navbar expand="lg">
         <Container>
           <Nav class="me-auto w-full d-flex align-items-center gap-2 min-h-[58px]">
-            <Form.Select
-              value={selectedPrinter() || ""}
-              onInput={onSelect}
-              aria-label="Printer select"
-              class="!w-full sm:!w-[350px]"
-              size="sm"
-              disabled={!qzLoaded()}
+            <Show
+              when={printers().length > 0}
+              fallback={
+                <Placeholder animation="glow">
+                  <Placeholder
+                    as="div"
+                    class="!w-full sm:!w-[350px] h-[31px] rounded"
+                  />
+                </Placeholder>
+              }
             >
-              <option value="">Выберите принтер</option>
-              {printers().map((p) => (
-                <option value={p} key={p}>
-                  {p}
-                </option>
-              ))}
-            </Form.Select>
+              <Form.Select
+                value={selectedPrinter() || ""}
+                onInput={onSelect}
+                aria-label="Printer select"
+                class="!w-full sm:!w-[350px]"
+                size="sm"
+                disabled={!qzLoaded()}
+              >
+                <option value="">Выберите принтер</option>
+                {printers().map((p) => (
+                  <option value={p} key={p}>
+                    {p}
+                  </option>
+                ))}
+              </Form.Select>
+            </Show>
             <Button
               onClick={onRefresh}
               variant="secondary"
