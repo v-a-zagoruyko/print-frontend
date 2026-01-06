@@ -25,7 +25,7 @@ export function ProtectedRoute(props) {
 
   const [info] = createResource(async () => {
     try {
-      const data = await apiFetch("/user/");
+      const data = await apiFetch("/v1/system/me/");
       return { success: true, data };
     } catch {
       return { success: false };

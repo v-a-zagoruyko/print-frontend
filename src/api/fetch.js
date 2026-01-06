@@ -1,6 +1,7 @@
 import { camelizeKeys } from "humps";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const SERVICE_URL = import.meta.env.VITE_SERVICE_URL;
 
 function getCookie(name) {
   return document.cookie.split("; ").reduce((r, v) => {
@@ -14,18 +15,35 @@ export async function apiFetch(path, options = {}) {
     "Content-Type": "application/json",
     ...(options.headers || {}),
   };
+
   const method = (options.method || "GET").toUpperCase();
   if (method !== "GET" && method !== "HEAD") {
     headers["X-CSRFToken"] = getCookie("csrftoken");
   }
+
   const res = await fetch(`${API_URL}${path}`, {
     ...options,
     headers,
     credentials: "include",
   });
+
   if (!res.ok) {
     throw new Error(`API error: ${res.status}`);
   }
+
   const data = await res.json();
   return camelizeKeys(data);
+}
+
+export async function serviceFetch(path, options = {}) {
+  const res = await fetch(`${SERVICE_URL}${path}`, {
+    ...options,
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error(`Service error: ${res.status}`);
+  }
+
+  return res;
 }

@@ -1,7 +1,7 @@
+import { serviceFetch } from "api/fetch";
+
 let qz;
 let initializing = null;
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 export async function initQz() {
   if (qz && qz.websocket && qz.websocket.isActive && qz.websocket.isActive())
@@ -11,33 +11,31 @@ export async function initQz() {
     const mod = await import("qz-tray");
     qz = mod.default || mod;
 
-    qz.security.setCertificatePromise(function (resolve, reject) {
-      fetch(`${API_URL}/qz/cert/`, {
-        cache: "no-store",
+    qz.security.setCertificatePromise((resolve, reject) => {
+      serviceFetch("/qz/cert/", {
         headers: { "Content-Type": "text/plain" },
       })
-        .then(function (resp) {
-          resp.ok ? resp.text().then(resolve) : reject(resp.statusText);
-        })
+        .then((resp) =>
+          resp.ok ? resp.text().then(resolve) : reject(resp.statusText)
+        )
         .catch(reject);
     });
 
     qz.security.setSignatureAlgorithm("SHA512");
 
-    qz.security.setSignaturePromise(function (toSign) {
-      return function (resolve, reject) {
-        fetch(`${API_URL}/qz/sign/`, {
+    qz.security.setSignaturePromise((toSign) => {
+      return (resolve, reject) => {
+        serviceFetch("/qz/sign/", {
           method: "POST",
-          cache: "no-store",
-          credentials: "include",
           headers: { "Content-Type": "text/plain" },
           body: toSign,
         })
           .then((resp) => {
-            if (!resp.ok)
+            if (!resp.ok) {
               return resp.text().then((t) => {
                 throw new Error("Bad response: " + t);
               });
+            }
             return resp.text();
           })
           .then(resolve)

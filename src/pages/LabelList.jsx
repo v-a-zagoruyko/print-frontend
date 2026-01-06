@@ -75,7 +75,7 @@ export function LabelList(props) {
     setError(null);
     setActiveCategory(null);
 
-    apiFetch(`/label/${props.entity}/`)
+    apiFetch(`/v1/labels/${props.entity}/`)
       .then((res) => setData(res))
       .catch((err) => setError(err?.message || String(err)))
       .finally(() => setLoading(false));
@@ -129,7 +129,7 @@ export function LabelList(props) {
     }
 
     try {
-      const url = `/label/${encodeURIComponent(
+      const url = `/v1/labels/${encodeURIComponent(
         props.entity
       )}/${encodeURIComponent(id)}/?${params.toString()}`;
       const data = await apiFetch(url);
@@ -176,7 +176,7 @@ export function LabelList(props) {
     }
 
     try {
-      const url = `/label/${encodeURIComponent(
+      const url = `/v1/labels/${encodeURIComponent(
         props.entity
       )}/${encodeURIComponent(id)}/?${params.toString()}`;
       const data = await apiFetch(url);
