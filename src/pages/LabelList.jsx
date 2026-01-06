@@ -230,15 +230,21 @@ export function LabelList(props) {
           <Navbar expand="lg">
             <Container>
               <Nav class="me-auto w-full d-flex align-items-center gap-2 min-h-[58px]">
-                <Form.Control
-                  type="date"
-                  value={selectedDate()}
-                  onInput={onSelectDate}
-                  min={todayDate()}
-                  aria-label="Выбор даты"
-                  class="!w-full sm:!w-[350px]"
-                  size="sm"
-                />
+                <div class="!w-full sm:!w-[350px]">
+                  <Form.Label htmlFor="dateInput">
+                    Дата изготовления:
+                  </Form.Label>
+                  <Form.Control
+                    id="dateInput"
+                    type="date"
+                    value={selectedDate()}
+                    onChange={onSelectDate}
+                    min={todayDate()}
+                    aria-label="Выбор даты"
+                    class="!w-full sm:!w-[350px]"
+                    size="sm"
+                  />
+                </div>
               </Nav>
             </Container>
           </Navbar>

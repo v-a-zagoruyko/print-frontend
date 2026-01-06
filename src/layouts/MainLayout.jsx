@@ -30,7 +30,9 @@ export function MainLayout(props) {
             </Nav>
             <Nav>
               <Navbar.Text>
-                <a href={LOGIN_URL} target="_blank">{info.username}</a>
+                <a href={LOGIN_URL} target="_blank">
+                  {info.username}
+                </a>
               </Navbar.Text>
             </Nav>
           </Navbar.Collapse>

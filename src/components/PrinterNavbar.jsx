@@ -53,34 +53,38 @@ export function PrinterNavbar() {
     <>
       <Navbar expand="lg">
         <Container>
-          <Nav class="me-auto w-full d-flex align-items-center gap-2 min-h-[58px]">
-            <Show
-              when={printers().length > 0}
-              fallback={
-                <Placeholder animation="glow">
-                  <Placeholder
-                    as="div"
-                    class="!w-full sm:!w-[350px] h-[31px] rounded"
-                  />
-                </Placeholder>
-              }
-            >
-              <Form.Select
-                value={selectedPrinter() || ""}
-                onInput={onSelect}
-                aria-label="Printer select"
-                class="!w-full sm:!w-[350px]"
-                size="sm"
-                disabled={!qzLoaded()}
+          <Nav class="me-auto w-full d-flex align-items-end gap-2 min-h-[58px]">
+            <div class="!w-full sm:!w-[350px]">
+              <Form.Label htmlFor="printerSelect">Принтер:</Form.Label>
+              <Show
+                when={printers().length > 0}
+                fallback={
+                  <Placeholder animation="glow">
+                    <Placeholder
+                      as="div"
+                      class="!w-full sm:!w-[350px] h-[31px] rounded"
+                    />
+                  </Placeholder>
+                }
               >
-                <option value="">Выберите принтер</option>
-                {printers().map((p) => (
-                  <option value={p} key={p}>
-                    {p}
-                  </option>
-                ))}
-              </Form.Select>
-            </Show>
+                <Form.Select
+                  id="printerSelect"
+                  value={selectedPrinter() || ""}
+                  onInput={onSelect}
+                  aria-label="Printer select"
+                  class="!w-full sm:!w-[350px]"
+                  size="sm"
+                  disabled={!qzLoaded()}
+                >
+                  <option value="">Выберите принтер</option>
+                  {printers().map((p) => (
+                    <option value={p} key={p}>
+                      {p}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Show>
+            </div>
             <Button
               onClick={onRefresh}
               variant="secondary"
@@ -88,7 +92,7 @@ export function PrinterNavbar() {
               size="sm"
               disabled={!qzLoaded()}
             >
-              Обновить
+              Обновить список принтеров
             </Button>
             {!qzLoaded() && qzError() && (
               <Alert variant="danger" class="ml-auto mb-0">
