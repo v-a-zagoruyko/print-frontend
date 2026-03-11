@@ -30,10 +30,31 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy via SSH
+      # - name: Deploy via SSH (bolshie-molodcy)
+      #   uses: appleboy/ssh-action@v0.1.8
+      #   with:
+      #     host: ${{ secrets.SSH_HOST }}
+      #     username: ${{ secrets.SSH_USER }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     port: ${{ secrets.SSH_PORT }}
+      #     passphrase: ''
+      #     script: |
+      #       rm -rf /srv/print-frontend/dist/*
+
+      # - name: Upload dist to server (bolshie-molodcy)
+      #   uses: appleboy/scp-action@v0.1.7
+      #   with:
+      #     host: ${{ secrets.SSH_HOST }}
+      #     username: ${{ secrets.SSH_USER }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     port: ${{ secrets.SSH_PORT }}
+      #     source: "dist/*"
+      #     target: "/srv/print-frontend/"
+
+      - name: Deploy via SSH (collective)
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: ${{ secrets.SSH_HOST }}
+          host: ${{ secrets.SSH_HOST_COLLECTIVE }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
@@ -41,10 +62,10 @@ jobs:
           script: |
             rm -rf /srv/print-frontend/dist/*
 
-      - name: Upload dist to server
+      - name: Upload dist to server (collective)
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.SSH_HOST }}
+          host: ${{ secrets.SSH_HOST_COLLECTIVE }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
